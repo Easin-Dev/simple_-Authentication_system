@@ -1,9 +1,29 @@
+'use client';
 import { Facebook } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { Eye, EyeOff } from 'lucide-react';  // Import Eye and EyeOff icons from lucide-react
 
 const LoginPage = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [showPassword, setShowPassword] = useState(false); 
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form Data:', formData);
+  };
+
   return (
     <div className="min-h-screen grid lg:grid-cols-2 grid-cols-1">
       {/* Left Side - Login Form */}
@@ -17,25 +37,40 @@ const LoginPage = () => {
             and enjoy the best shopping experience
           </p>
 
-          <form className="mt-10 space-y-5">
+          <form className="mt-10 space-y-5" onSubmit={handleSubmit}>
             <div>
               <label className="block text-lg font-semibold mb-1">Email</label>
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Enter your email"
                 className="w-full h-12 px-4 bg-gray-100 rounded-md outline-none"
               />
             </div>
 
-            <div>
-              <label className="block text-lg font-semibold mb-1">
-                Password
-              </label>
+            <div className="relative">
+              <label className="block text-lg font-semibold mb-1">Password</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"} // Toggle between text and password input
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Enter your password"
                 className="w-full h-12 px-4 bg-gray-100 rounded-md outline-none"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)} 
+                className="absolute right-5 top-14 transform -translate-y-1/2"
+              >
+                {showPassword ? (
+                  <EyeOff size={24} className="text-gray-500" />
+                ) : (
+                  <Eye size={24} className="text-gray-500" />
+                )}
+              </button>
             </div>
 
             <button
