@@ -13,14 +13,14 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center bg-white h-20 px-10 shadow-md">
       <div>
-        <h1>SHOP.CO</h1>
+        <h1 className="text-4xl font-bold">SHOP.CO</h1>
       </div>
 
 
       <div className="flex items-center justify-between w-1/2">
         <div>
           {navbarItems.map((item) => (
-            <Link className="pr-4" key={item?.id} href={item?.link}>
+            <Link className="pr-4 hover:underline" key={item?.id} href={item?.link}>
               {item?.name}
             </Link>
           ))}

@@ -1,4 +1,11 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+// next.config.js
 
-export default nextConfig;
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    images: {
+      domains: ['i.ibb.co.com'], // চাইলে আরও domain যোগ করো
+    },
+  };
+  
+  export default nextConfig;
+  
