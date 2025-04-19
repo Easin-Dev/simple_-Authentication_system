@@ -37,9 +37,9 @@ const Navbar = () => {
         <button className="btn btn-circle">
           <ShoppingCart />
         </button>
-        <button className="btn btn-error text-white text-xl rounded-3xl">
+        <Link href={"/get-in"} className="btn btn-error text-white text-xl rounded-3xl">
           Get in
-        </button>
+        </Link>
       </div>
     </div>
   );
