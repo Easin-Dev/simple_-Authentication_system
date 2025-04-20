@@ -1,11 +1,21 @@
 "use client";
-import { ShoppingCart, Menu, X, Search } from "lucide-react";
+import {
+  ShoppingCart,
+  Menu,
+  X,
+  Search,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const navbarItems = [
     { id: 1, name: "Shop", link: "/shop" },
@@ -14,13 +24,16 @@ const Navbar = () => {
     { id: 4, name: "Brands", link: "/brands" },
   ];
 
+  const handleLogout = () => {
+    signOut();
+    setShowDropdown(false);
+  };
+
   return (
     <nav className="bg-white shadow-md w-full z-50 relative">
       <div className="flex justify-between items-center px-4 md:px-10 h-20">
-        {/* Logo */}
         <h1 className="text-2xl md:text-4xl font-bold">SHOP.CO</h1>
 
-        {/* Desktop Nav */}
         <div className="hidden md:flex items-center justify-between w-2/3">
           <div className="flex gap-6">
             {navbarItems.map((item) => (
@@ -41,9 +54,7 @@ const Navbar = () => {
           />
         </div>
 
-        {/* Right Side */}
-        <div className="flex items-center gap-4">
-          {/* Search icon (mobile only) */}
+        <div className="flex items-center gap-4 relative">
           <button
             onClick={() => setShowSearch(!showSearch)}
             className="md:hidden"
@@ -51,20 +62,47 @@ const Navbar = () => {
             <Search size={24} />
           </button>
 
-          {/* Cart Icon */}
-          <button className="btn btn-circle bg-transparent border-none">
+          <button className="btn btn-circle border-none">
             <ShoppingCart />
           </button>
 
-          {/* Get In Button (only desktop) */}
-          <Link
-            href="/get-in"
-            className="hidden md:block btn btn-error text-white text-base px-6 py-2 rounded-3xl"
-          >
-            Get in
-          </Link>
+          {session?.user ? (
+            <div className="relative">
+              <div
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="flex items-center gap-2 btn rounded-full"
+              >
+                <img
+                  src={session.user.image || "/default-user.png"}
+                  alt="User"
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="hidden md:inline-block font-medium text-sm">
+                  {session.user.name}
+                </span>
+                <span>{showDropdown ? <ChevronUp /> : <ChevronDown />}</span>
+              </div>
 
-          {/* Menu Icon (mobile only) */}
+              {showDropdown && (
+                <div className="absolute right-0 top-14 bg-white shadow-md rounded-lg w-40 p-2 transition-all duration-300 z-50">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              href="/get-in"
+              className="hidden md:block btn btn-error text-white text-base px-6 py-2 rounded-3xl"
+            >
+              Get in
+            </Link>
+          )}
+
           <button
             className="md:hidden text-black"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -74,7 +112,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Nav Dropdown */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ${
           menuOpen ? "max-h-96 py-4 px-6" : "max-h-0 px-6"
@@ -90,12 +128,32 @@ const Navbar = () => {
               {item.name}
             </Link>
           ))}
-          <Link
-            href="/get-in"
-            className="btn btn-error text-white text-base px-6 py-2 rounded-3xl mt-2"
-          >
-            Get in
-          </Link>
+
+          {session?.user ? (
+            <div className="flex flex-col mt-2">
+              <div className="flex items-center gap-2 mb-2">
+                <img
+                  src={session.user.image || "/default-user.png"}
+                  alt="User"
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="font-medium text-sm">{session.user.name}</span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="text-left px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 text-sm"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/get-in"
+              className="btn btn-error text-white text-base px-6 py-2 rounded-3xl mt-2"
+            >
+              Get in
+            </Link>
+          )}
         </div>
       </div>
 
