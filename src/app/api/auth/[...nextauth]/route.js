@@ -8,14 +8,15 @@ export const authOptions = {
     Credentials({
       name: "credentials",
       credentials: {
+        fullName: { label: "Full Name", type: "text", placeholder: "full name" },
         email: { label: "Email", type: "text", placeholder: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const { email, password } = credentials;
+        const {fullName, email, password } = credentials;
 
-        if (email === "test@example.com" && password === "password123") {
-          return { id: 1, name: "Test User", email: "test@example.com" };
+        if (fullName && email && password) {
+          return { id: 1, fullName: fullName, email: email};
         }
 
         throw new Error("Invalid email or password");
@@ -38,6 +39,25 @@ export const authOptions = {
   jwt: {
     secret: process.env.JWT_SECRET,
   },
+  callbacks: {
+    async jwt({ token, user}) {
+      if(user){
+        token.id = user.id;
+        token.fullName = user.fullName;
+        token.email = user.email;
+
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.id = token.id;
+        session.fullName = token.fullName;
+        session.email = token.email;
+      }
+      return session;
+    }
+  }
 };
 
 const handler = NextAuth(authOptions);

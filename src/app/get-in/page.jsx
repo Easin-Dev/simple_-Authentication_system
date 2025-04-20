@@ -5,13 +5,12 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 const GetInPage = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   console.log("Session:", session);
   if (session?.user) {
-    const router = useRouter();
     router.push("/");
   }
   const [formData, setFormData] = useState({
@@ -21,6 +20,7 @@ const GetInPage = () => {
   });
 
   const [showPassword, setPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -29,9 +29,25 @@ const GetInPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
+    setError("");
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      fullName: formData.fullName,
+      email: formData.email,
+      password: formData.password,
+    })
+
+    if(result?.error) {
+      setError(result.error);
+    }else{
+      router.push("/");
+    }
+    console.log("Result:", result);
+
   };
 
   return (

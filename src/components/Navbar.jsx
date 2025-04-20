@@ -6,6 +6,8 @@ import {
   Search,
   ChevronUp,
   ChevronDown,
+  LogOut,
+  CircleUser,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -73,12 +75,12 @@ const Navbar = () => {
                 className="flex items-center gap-2 btn rounded-full"
               >
                 <img
-                  src={session.user.image || "/default-user.png"}
+                  src={session.user.image || "https://i.ibb.co.com/5XJFV6yV/no-author.png"}
                   alt="User"
                   className="w-8 h-8 rounded-full"
                 />
                 <span className="hidden md:inline-block font-medium text-sm">
-                  {session.user.name}
+                  {session?.user?.name || session?.fullName}
                 </span>
                 <span>{showDropdown ? <ChevronUp /> : <ChevronDown />}</span>
               </div>
@@ -86,9 +88,16 @@ const Navbar = () => {
               {showDropdown && (
                 <div className="absolute right-0 top-14 bg-white shadow-md rounded-lg w-40 p-2 transition-all duration-300 z-50">
                   <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
+                    className="w-full flex gap-3 items-center text-left px-4 py-2 hover:bg-gray-100 text-sm"
                   >
+                    <CircleUser size={20} />
+                    Profile
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex gap-3 items-center text-left px-4 py-2 hover:bg-gray-100 text-sm"
+                  >
+                    <LogOut size={20} />
                     Logout
                   </button>
                 </div>
@@ -133,11 +142,11 @@ const Navbar = () => {
             <div className="flex flex-col mt-2">
               <div className="flex items-center gap-2 mb-2">
                 <img
-                  src={session.user.image || "/default-user.png"}
+                  src={session.user.image || "https://i.ibb.co.com/5XJFV6yV/no-author.png"}
                   alt="User"
                   className="w-8 h-8 rounded-full"
                 />
-                <span className="font-medium text-sm">{session.user.name}</span>
+                <span className="font-medium text-sm">{session?.user?.name || session?.fullName}</span>
               </div>
               <button
                 onClick={handleLogout}
