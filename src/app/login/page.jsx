@@ -3,7 +3,7 @@ import { Facebook } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { Eye, EyeOff } from 'lucide-react';  // Import Eye and EyeOff icons from lucide-react
+import { Eye, EyeOff } from 'lucide-react';  
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -53,7 +53,7 @@ const LoginPage = () => {
             <div className="relative">
               <label className="block text-lg font-semibold mb-1">Password</label>
               <input
-                type={showPassword ? "text" : "password"} // Toggle between text and password input
+                type={showPassword ? "text" : "password"} 
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -66,9 +66,9 @@ const LoginPage = () => {
                 className="absolute right-5 top-14 transform -translate-y-1/2"
               >
                 {showPassword ? (
-                  <EyeOff size={24} className="text-gray-500" />
+                    <Eye size={24} className="text-gray-500" />
                 ) : (
-                  <Eye size={24} className="text-gray-500" />
+                    <EyeOff size={24} className="text-gray-500" />
                 )}
               </button>
             </div>

@@ -3,8 +3,11 @@ import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 
 const GetInPage = () => {
+  const {data: session} = useSession();
+  console.log("Session:", session);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -117,7 +120,7 @@ const GetInPage = () => {
 
           {/* Social Buttons */}
           <div className="space-y-4">
-            <button className="w-full h-12 bg-white border text-gray-700 font-medium rounded-md hover:bg-gray-50 flex items-center justify-center gap-2">
+            <button onClick={() => signIn("google")} className="w-full h-12 bg-white border text-gray-700 font-medium rounded-md hover:bg-gray-50 flex items-center justify-center gap-2">
               <Image
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 width={20}
