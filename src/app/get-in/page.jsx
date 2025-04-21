@@ -14,8 +14,6 @@ const GetInPage = () => {
     router.push("/admin-dashboard/users");
   } else if (session?.user && session?.role == "user") {
     router.push("/user-dashboard/personal-information");
-  } else {
-    return router.push("/login");
   }
   const [formData, setFormData] = useState({
     fullName: "",
@@ -43,7 +41,7 @@ const GetInPage = () => {
       fullName: formData.fullName,
       email: formData.email,
       password: formData.password,
-      role: "admin",
+      role: "user",
     });
 
     if (result?.error) {

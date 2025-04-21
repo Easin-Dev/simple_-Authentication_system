@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }) {
         <h1 className="text-2xl font-medium">My profile</h1>
         <Sidebar role={session?.role} />
       </div>
-      <div className="col-span-3 p-20">
+      <div className="col-span-3">
         {children}</div>
     </div>
   );
