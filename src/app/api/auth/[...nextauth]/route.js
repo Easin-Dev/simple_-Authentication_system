@@ -13,10 +13,10 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const {fullName, email, password } = credentials;
+        const {fullName, email, password, role } = credentials;
 
         if (fullName && email && password) {
-          return { id: 1, fullName: fullName, email: email};
+          return { id: 1, fullName: fullName, email: email, role: role };
         }
 
         throw new Error("Invalid email or password");
@@ -45,6 +45,7 @@ export const authOptions = {
         token.id = user.id;
         token.fullName = user.fullName;
         token.email = user.email;
+        token.role = user.role;
 
       }
       return token;
@@ -54,6 +55,7 @@ export const authOptions = {
         session.id = token.id;
         session.fullName = token.fullName;
         session.email = token.email;
+        session.role = token.role;
       }
       return session;
     }

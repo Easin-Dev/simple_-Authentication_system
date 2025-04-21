@@ -10,8 +10,12 @@ const GetInPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
   console.log("Session:", session);
-  if (session?.user) {
-    router.push("/");
+  if (session?.user && session?.role == "admin") {
+    router.push("/admin-dashboard/users");
+  } else if (session?.user && session?.role == "user") {
+    router.push("/user-dashboard/personal-information");
+  } else {
+    return router.push("/login");
   }
   const [formData, setFormData] = useState({
     fullName: "",
@@ -39,15 +43,15 @@ const GetInPage = () => {
       fullName: formData.fullName,
       email: formData.email,
       password: formData.password,
-    })
+      role: "admin",
+    });
 
-    if(result?.error) {
+    if (result?.error) {
       setError(result.error);
-    }else{
+    } else {
       router.push("/");
     }
     console.log("Result:", result);
-
   };
 
   return (
