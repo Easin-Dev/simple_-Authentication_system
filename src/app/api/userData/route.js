@@ -1,19 +1,16 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import UserData from "@/models/users";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export async function POST(req) {
   try {
-    // Connect to the database
     await connectToDatabase();
 
-    // Parse the request body
     const body = await req.json();
     const { name, email, password, role, provider, image } = body;
 
-    console.log("Received data:", body);
-
-    // Validate required fields
+    // ✅ Validation
     if (!name || !email || !password) {
       return NextResponse.json(
         { error: "All fields are required" },
@@ -21,7 +18,7 @@ export async function POST(req) {
       );
     }
 
-    // Check if the email already exists
+    // ✅ Check if email already exists
     const existingUser = await UserData.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
@@ -30,16 +27,18 @@ export async function POST(req) {
       );
     }
 
-    // Create a new user
+    // ✅ Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // ✅ Save user with hashed password
     const user = await UserData.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       role,
       provider,
       image,
     });
-    console.log("User created:", user);
 
     return NextResponse.json(
       { message: "User created successfully", user },
@@ -47,5 +46,9 @@ export async function POST(req) {
     );
   } catch (error) {
     console.error("Error creating user:", error);
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
   }
 }

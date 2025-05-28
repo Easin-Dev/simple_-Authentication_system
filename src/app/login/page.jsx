@@ -4,7 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -25,7 +27,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/login", formData);
+      const response = await axios.post("/api/userData/userLogin", formData);
       const user = response.data.user;
 
       toast.success("Login successful!");
@@ -38,11 +40,12 @@ const LoginPage = () => {
       }
     } catch (error) {
       if (error.response?.status === 401) {
-        toast.error("Invalid email or password");
+        toast.error("Invalid email");
+      } else if (error.response?.status == 402) {
+        toast.error("Invalid password");
       } else {
         toast.error("Something went wrong");
       }
-
       console.error("Login failed:", error);
     }
   };
@@ -59,7 +62,7 @@ const LoginPage = () => {
           <p className="text-lg text-center text-gray-500 font-normal">
             and enjoy the best shopping experience
           </p>
-
+          <ToastContainer position="top-center" autoClose={10000} />
           <form className="mt-10 space-y-5" onSubmit={handleSubmit}>
             <div>
               <label className="block text-lg font-semibold mb-1">Email</label>
