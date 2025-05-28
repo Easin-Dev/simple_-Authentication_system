@@ -1,27 +1,50 @@
-'use client';
+"use client";
 import { Facebook } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { Eye, EyeOff } from 'lucide-react';  
+import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/router";
 
 const LoginPage = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
+
+    try {
+      const response = await axios.post("/api/login", formData);
+      const user = response.data.user;
+
+      toast.success("Login successful!");
+
+      // Redirect based on role
+      if (user.role === "admin") {
+        router.push("/admin-dashboard/users");
+      } else {
+        router.push("/user-dashboard/personal-information");
+      }
+    } catch (error) {
+      if (error.response?.status === 401) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.error("Something went wrong");
+      }
+
+      console.error("Login failed:", error);
+    }
   };
 
   return (
@@ -51,9 +74,11 @@ const LoginPage = () => {
             </div>
 
             <div className="relative">
-              <label className="block text-lg font-semibold mb-1">Password</label>
+              <label className="block text-lg font-semibold mb-1">
+                Password
+              </label>
               <input
-                type={showPassword ? "text" : "password"} 
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -62,20 +87,20 @@ const LoginPage = () => {
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)} 
+                onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-5 top-14 transform -translate-y-1/2"
               >
                 {showPassword ? (
-                    <Eye size={24} className="text-gray-500" />
+                  <Eye size={24} className="text-gray-500" />
                 ) : (
-                    <EyeOff size={24} className="text-gray-500" />
+                  <EyeOff size={24} className="text-gray-500" />
                 )}
               </button>
             </div>
 
             <button
               type="submit"
-              className="w-full h-12 bg-black text-white rounded-md mt-6 hover:bg-gray-800 transition text-lg font-semibold"
+              className="w-full h-12 bg-black text-white rounded-md mt-6 hover:bg-gray-800 transition text-lg font-semibold cursor-pointer"
             >
               Login
             </button>

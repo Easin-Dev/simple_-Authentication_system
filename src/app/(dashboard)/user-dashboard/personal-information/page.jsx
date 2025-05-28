@@ -8,7 +8,6 @@ const Page = () => {
   const {data: session} = useSession();
   const [editMode, setEditMode] = useState(false);
   const fileInputRef = useRef(null);
-
   const [image, setImage] = useState('https://i.ibb.co.com/5XJFV6yV/no-author.png'); 
 
   const [formData, setFormData] = useState({
@@ -74,15 +73,6 @@ const Page = () => {
 
 
       <form className='space-y-4 w-2/3 mx-auto' onSubmit={handleSubmit}>
-        <div>
-          <label className='block font-medium'>Student ID:</label>
-          <input
-            type='text'
-            value='N/A'
-            readOnly
-            className='w-full bg-gray-100 px-4 py-2 rounded-md'
-          />
-        </div>
 
         <div>
           <label className='block font-medium'>Full Name:</label>

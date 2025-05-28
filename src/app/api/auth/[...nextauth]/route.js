@@ -40,22 +40,24 @@ export const authOptions = {
     secret: process.env.JWT_SECRET,
   },
   callbacks: {
-    async jwt({ token, user}) {
+    async jwt({ token, user, account }) {
       if(user){
         token.id = user.id;
         token.fullName = user.fullName;
         token.email = user.email;
-        token.role = user.role;
+        token.provider = account.provider || "credentials";
+        token.role = user.role  || "user";
 
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token, account}) {
       if (token) {
         session.id = token.id;
         session.fullName = token.fullName;
         session.email = token.email;
-        session.role = token.role;
+        session.provider = token.provider || "credentials";
+        session.role = token.role || "user";
       }
       return session;
     }

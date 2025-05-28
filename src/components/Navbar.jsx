@@ -88,7 +88,7 @@ const Navbar = () => {
               {showDropdown && (
                 <div className="absolute right-0 top-14 flex flex-col gap-3 bg-white shadow-md rounded-lg w-40 p-2 transition-all duration-300 z-50">
                   <Link
-                    href="/profile"
+                    href="user-dashboard/personal-information"
                     className="w-full flex gap-3 cursor-pointer items-center text-left px-4 py-2 hover:bg-gray-100 text-sm"
                   >
                     <CircleUser size={20} />
